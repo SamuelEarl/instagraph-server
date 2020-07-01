@@ -1,0 +1,30 @@
+type Author {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String! @id @search(by: [hash])
+  password: String! @search(by: [hash])
+  posts: [Post] @hasInverse(field: author)
+  comments: [Comment]
+  sessionId: String # This will be a custom resolver that returns a uuid.
+#   sessionExp: DateTime!
+#   scope: [String!]!
+}
+
+type Post {
+  id: ID!
+  # The first and last name of the author will be retrieved from the Author object type.
+  author: Author!
+  createdAt: DateTime!
+  content: String!
+  likes: Int
+  comments: [Comment]
+}
+
+type Comment {
+  id: ID!
+  # The first and last name of the author will be retrieved from the Author object type.
+  author: Author!
+  createdAt: DateTime!
+  content: String!
+}
