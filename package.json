@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "NODE_ENV=development netlify dev",
+    "__BUILD-COMMENT__": "This is the folder that holds your serverless functions. When you build your functions, Netlify will zip each of those functions and store the output zipped files inside the '/.netlify/functions' directory.",
+    "build": "NODE_ENV=production netlify build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

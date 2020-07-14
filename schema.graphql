@@ -1,20 +1,30 @@
-type Author {
-  id: ID!
+type User {
+  id: String! @search(by: [hash]) # This is the userId that is provided by Google Auth. Google Auth ensures that this value is unique, so I do not need to set this as unique.
   firstName: String!
   lastName: String!
   email: String! @id @search(by: [hash])
-  password: String! @search(by: [hash])
-  posts: [Post] @hasInverse(field: author)
+  # password: String! @search(by: [hash])
+  posts: [Post] @hasInverse(field: user)
   comments: [Comment]
-  sessionId: String # This will be a custom resolver that returns a uuid.
-#   sessionExp: DateTime!
-#   scope: [String!]!
+
+  # When I try to update the schema while using the @custom directive I get this error: "couldn't rewrite mutation updateGQLSchema because input:10: Undefined directive custom."
+  # That is because the @auth and @custom directives are not implemented yet, but should be in v20.07. See https://github.com/dgraph-io/dgraph/issues/5610.
+
+  # # sessionId is a custom resolver that returns a uuid.
+  # sessionId: String @custom(http: {
+  #   url: "http://localhost:8888/.netlify/functions/auth-set-session-id",
+  #   method: PUT,
+  #   # The docs say that "each custom [field] call must include either an `ID` or `@id` field" (https://graphql.dgraph.io/custom/directive), so I am trying the body option.
+  #   body: "{ id: $id }"
+  # })
+  # sessionExp: DateTime!
+  # scope: [String!]!
 }
 
 type Post {
   id: ID!
-  # The first and last name of the author will be retrieved from the Author object type.
-  author: Author!
+  # The first and last name of the user will be retrieved from the User object type.
+  user: User!
   createdAt: DateTime!
   content: String!
   likes: Int
@@ -23,8 +33,8 @@ type Post {
 
 type Comment {
   id: ID!
-  # The first and last name of the author will be retrieved from the Author object type.
-  author: Author!
+  # The first and last name of the user will be retrieved from the User object type.
+  user: User!
   createdAt: DateTime!
   content: String!
 }

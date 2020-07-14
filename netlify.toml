@@ -1,19 +1,23 @@
+# NOTES:
+# * When you first create a Netlify project, you should install the Netlify CLI (https://docs.netlify.com/cli/get-started/).
+  # * Then, in a terminal, log into Netlify from inside your project directory by running `netlify login`.
+  # * Then you should link your project to your Netlify account with `netlify link`.
+
+# * In the Netlify UI, when you click "New site from Git" you will be prompted to set a "Build command" and a "Publish directory". This is what you should do:
+  # Build command: #
+  # Publish directory: (Leave this blank)
+# * You can also set these by going to "Settings" > "Build & deploy" > "Continuous Deployment" > "Build settings".
+
+
 [dev]
   functions = "functions" # You need to specify the folder where your functions will be served from during development otherwise the production functions will be served by default and they will have NODE_ENV = "production", which will mix up your dev and prod environments.
   # NODE_ENV = "development" # This has not been working for me, so I specified this in the npm 'dev' script.
 
 [build]
-  # The base setting is not necessary if your base directory is the root directory.
+  # The "base" setting is not necessary if your base directory is the root directory.
   # base = "/"
-  # command = "npm run build"
   functions = "functions" # This is the folder that holds your serverless functions. When you build your functions, Netlify will zip each of those functions and store the output zipped files inside the "/.netlify/functions" directory.
-  # functions = "functions-prod" # If you are using `netlify-lambda`, then you need to specify an output directory for your built functions. The folder that is specified here is where your built function files will go. See https://github.com/netlify/netlify-lambda/issues/97#issuecomment-451353823. If you do not specify a "functions" setting under the [dev] block, then the "netlify dev" command will use this to know where to scaffold and serve your functions, which will mixed up your dev and build functions (see the "functions" comment under the [dev] block). So make sure that you have specified a "functions" setting under the [dev] block.
   # NODE_ENV = "production" # This didn't work for the [dev] block, so I am not specifying it here either.
-
-# I don't know if this is still necessary. I will test this out and see if I want to specify the NODE_ENV in the npm scripts or in this config file.
-# [context.production.environment]
-#   # https://docs.netlify.com/configure-builds/file-based-configuration/#sample-file
-#   NODE_ENV = "production"
 
 [[redirects]]
   from = "/*"
